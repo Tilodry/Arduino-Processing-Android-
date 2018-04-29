@@ -1,0 +1,67 @@
+import io.inventit.processing.android.serial.*;
+
+
+
+
+//MAIN D
+
+Serial myPort;  // Create object from Serial class
+String val;     // Data received from the serial port
+//MAIN F
+int test = 0;
+int vitesse = 0;
+float angle;
+int centerX = 200;
+int centerY =198;
+int secHand = 165;
+PImage anmmtr;
+
+//MAIN D
+void setup()
+{
+  // I know that the first port in the serial list on my mac
+  // is Serial.list()[0].
+  // On Windows machines, this generally opens COM1.
+  // Open whatever port is the one you're using.
+
+  myPort = new Serial(this, Serial.list(this)[0], 115200);
+  //MAIN F
+  size(1000, 1000);
+  frameRate(124);
+  anmmtr = loadImage("Anémomètreprojet.png");
+}
+//MAIN D
+void draw()
+{ 
+
+  float quarterCircle = PI/2;
+  if ( myPort.available() < 0) 
+  {  // If data is available,
+    val = myPort.readStringUntil('\n');         // read it and store it in val
+  } 
+  //println(val); //print it out in the console
+  //MAIN F
+  val = trim(val);
+  //printArray(Serial.list());
+  if (val != null && match(trim(val), "^\\d+[.]\\d{2}$") != null)
+  {
+    float d = float(trim(val));
+    println(d);
+    image(anmmtr, 0, 0);
+    text(d, 20, 20);
+    for (int i=1; i<=60; i++) {
+      angle = i * PI / 30.0;
+      float x = (centerX + cos(angle)* secHand);
+      float y =(centerY + sin(angle)* secHand);
+
+
+      angle = ((2 * PI/260) * d) - quarterCircle;
+      x = centerX + secHand * cos(angle);
+      y = centerY + secHand * sin(angle);
+      stroke(255); 
+      line(centerX, centerY, x, y);
+    }
+
+    println(val);
+  }
+}
