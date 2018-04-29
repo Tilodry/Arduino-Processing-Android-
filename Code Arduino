@@ -1,0 +1,104 @@
+long int var = 0;
+
+long int Vmin = 0;
+
+long int Vmax = 0;
+
+long int Vamp = 0;
+
+long int boucle = 0;
+
+long int initialisation = 0;
+
+int moyenneint = 0;
+
+int affichage = 0;
+
+long int variableinit = 0;
+
+int Vfinale = 0;
+
+
+
+
+void setup()
+
+{
+
+  Serial.begin(9600);
+
+}
+
+void loop()
+
+{
+  boucle = 0;
+
+  Vmin = 0;
+
+  Vmax = 0;
+
+  while (initialisation < 50000)
+
+  {
+
+    var = analogRead(A1);
+
+    if (variableinit < var)variableinit = var;
+
+
+    initialisation = initialisation + 1;
+
+    affichage = affichage + 1;
+
+    if (affichage == 10000)
+
+    {
+
+      affichage = 0;
+
+      Serial.println("Initialisation en cours");
+
+    }
+  }
+
+  if (initialisation == 50000)
+
+  {
+
+    moyenneint = variableinit;
+
+    initialisation = initialisation + 1;
+
+    Serial.println("Initialisation terminee");
+
+  }
+
+  while (boucle < 10000)
+
+  {
+
+    var = analogRead(A1);
+
+    if (Vmin > var) (Vmin = var);
+
+    if (Vmax < var) (Vmax = var);
+
+    boucle = boucle + 1;
+
+  }
+
+  Vamp = (Vmin * Vmin) / Vmin + Vmax;
+  Vfinale = Vamp - moyenneint;
+
+  if ((Vfinale > 0))
+
+    Serial.println((Vfinale) / 1.245);
+
+
+  else
+
+    Serial.println(0.00);
+
+
+
